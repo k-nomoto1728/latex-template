@@ -97,6 +97,7 @@ align環境で数式を書く際には, ラベリングをするかどうかに�
 
 
 % ----------------------------------------------------------- %
+\newpage
 \section{定理・コメント}
 
 \subsection{定理環境}
@@ -133,6 +134,7 @@ align環境で数式を書く際には, ラベリングをするかどうかに�
 	命題\ref{prop:UniqueIdentityElement}と同様にして, 逆元の一意性も証明することができる.
 \end{rem}
 % ----------------------------------------------------------- %
+\newpage
 \section{図}
 
 準同型定理の図式は以下のようにして書ける.
@@ -165,22 +167,76 @@ align環境で数式を書く際には, ラベリングをするかどうかに�
 	\end{tikzpicture}
 \end{align}
 % ----------------------------------------------------------- %
-% \section{アルゴリズム・コード}
+\newpage
+\section{アルゴリズム・コード}
 
-% \begin{algorithm}
-% \caption{スゴい方法}
-% \Comment{的確なコメント}
-% \Function{MyFunction($a, b, c$)}{
-% 	\If{a > b}{
-% 	$\texttt{loss} \assign 20$ \Comment{これはヤバい}
-% 	$x, y \assign \FuncCall{Append}{a, b, c}$\;
-% 	$B \assign \FuncCall{GramSchmidt}{$B$}$
-% 	}
-% 	$x \assign \FuncCall{UpdateLoss}{a, b, c}$\;
-% 	\Return{$x, y$}
-% }
-% \end{algorithm}
+\subsection{疑似コード}
 
+疑似コード例は以下のようにして書くことができる.
+
+\begin{algorithm}
+
+	\caption{Euclidの互除法}
+	
+	\begin{algorithmic}[1]
+
+		\Function{Euclid}{$a,b$}
+			\State $r\gets a\bmod b$
+			\While{$r\not=0$} \Comment{$r=0$ならば最大公約数は$b$}
+				\State $a\gets b$
+				\State $b\gets r$
+				\State $r\gets a\bmod b$
+			\EndWhile
+			\State \textbf{return} $b$
+		\EndFunction
+
+	\end{algorithmic}
+
+\end{algorithm}
+
+高速に冪乗$a^n$を計算するアルゴリズムである\red{繰り返し二乗法}を説明する.
+簡単のため, 非負整数$n\in\bbZ$のサイズは高々3ビット, すなわち$n$は
+\begin{align}
+	n=n_0+n_12+n_22^2 \quad (n_0, n_1, n_2\in \{0, 1\})
+\end{align}
+という2進展開で表示されるとする. このとき
+\begin{align}
+	a^n
+	&=a^{n_0+n_12+n_22^2}\\
+	&=a^{n_0}\cdot a^{n_12+n_22^2}\\
+	&=a^{n_0}\cdot \skakko*{a^{n_1+n_22}}^2\\
+	&=a^{n_0}\cdot \skakko*{a^{n_1}\cdot \skakko*{a^{n_2}}^2}^2\\
+	&=a^{n_0}\cdot \skakko*{a^{n_1}\cdot \skakko*{a^{n_2}\cdot \skakko*{1}^2}^2}^2\\ \label{eq:square}
+\end{align}
+が成り立つ. したがってこの場合は二乗算を3回, 乗算を高々3回で計算可能である.
+\footnote{一般に, 繰り返し二乗法の計算量は$O(\log_2 n)$である.}
+式\eqref{eq:square}に従って冪乗$a^n$を計算するアルゴリズムが繰り返し二乗法である.
+
+\begin{algorithm}
+
+	\caption{繰り返し二乗法}
+	
+	\begin{algorithmic}[1]
+
+		\Function{pow}{$a,n$}
+			\State $n=n_0+n_12+n_22^2+\dots+n_{\ell-1}2^{\ell-1}$と表す
+			\State $\texttt{val}\gets 1$
+			\For{$i$}{$\ell-1$}{$0$}
+				\State $\texttt{val}\gets \texttt{val}\times\texttt{val}$
+				\If{$n_i == 1$}
+					\State $\texttt{val}\gets a\times\texttt{val}$
+				\EndIf
+			\EndFor
+			\State \textbf{return} \texttt{val}
+		\EndFunction
+
+	\end{algorithmic}
+
+\end{algorithm}
+
+\subsection{ソースコード}
+
+\lipsum[1-2]
 % \begin{python}
 % E = EllipticCurve([1, 0])
 % r = E.rank() % あいうえお
@@ -190,13 +246,9 @@ align環境で数式を書く際には, ラベリングをするかどうかに�
 % 	return f"2={1+1}"
 % \end{python}
 % ----------------------------------------------------------- %
-\section{証明}
-\subsection{証明環境}
-\lipsum[2]
-\newpage
-
 
 % ----------------------------------------------------------- %
+\newpage
 \printbibliography[title=参考文献]
 
 \end{document}
