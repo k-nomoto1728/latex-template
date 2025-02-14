@@ -1,0 +1,69 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Define colors                                            %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{BLUE}{HTML}{4981cf}
+\definecolor{GREEN}{HTML}{5c9593}
+\definecolor{PINK}{HTML}{dd7594}
+\definecolor{ORANGE}{HTML}{f58b05}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Theorem Environment                                      %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable,skins,theorems}
+
+\tcbset{
+	TheoremStyle/.style={
+		% ---- 4.5 Colors and Fonts
+		fonttitle=\rmfamily\bfseries\upshape,
+		% ---- 4.7.2 Rules
+		boxrule=0.5pt,
+		% ---- 4.7.4 Spacing
+		left*=1\zw,
+		right*=1\zw,
+		% ---- 4.8 Corners
+		% sharp corners=all,
+		% ---- 4.11 Box Content Additions
+		before upper={\setlength{\parindent}{1\zw}},
+		before lower={\setlength{\parindent}{1\zw}},
+		% ---- 4.14 Embedding into the Surroundings
+		before skip=10pt,
+		after skip=10pt,
+		% ---- 11.2 Skin Family "enhanced"
+		enhanced,
+		% ---- 19.3 Main Option Keys
+		breakable,
+	},
+	PINK/.style={
+		colframe=PINK,
+		colback=PINK!2!white,
+		colbacktitle=PINK,
+	},
+	BLUE/.style={
+		colframe=BLUE,
+		colback=BLUE!2!white,
+		colbacktitle=BLUE,
+	},
+	GREEN/.style={
+		colframe=GREEN,
+		colback=GREEN!2!white,
+		colbacktitle=GREEN,
+	},
+}
+
+\newtcbtheorem[number within=section]{thm}{定理}{TheoremStyle, PINK}{thm}
+\newtcbtheorem[use counter from=thm]{lem}{補題}{TheoremStyle, PINK}{lem}
+\newtcbtheorem[use counter from=thm]{prop}{命題}{TheoremStyle, PINK}{prop}
+\newtcbtheorem[use counter from=thm]{cor}{系}{TheoremStyle, PINK}{cor}
+
+\newtcbtheorem[use counter from=thm]{defi}{定義}{TheoremStyle, BLUE}{defi}
+
+\newtcbtheorem[use counter from=thm]{ex}{例}{TheoremStyle, GREEN}{ex}
+\newtcbtheorem[use counter from=thm]{rem}{注意}{TheoremStyle, GREEN}{rem}
+\newtcbtheorem[use counter from=thm]{conj}{予想}{TheoremStyle, GREEN}{conj}

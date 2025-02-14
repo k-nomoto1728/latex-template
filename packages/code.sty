@@ -1,0 +1,44 @@
+% ------------------------------------------------------------------------------------------
+% 【擬似コード】
+% 必要パッケージ : xcolor, algorithm2e
+% ------------------------------------------------------------------------------------------
+% \usepackage{xcolor}
+% \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+% \DontPrintSemicolon
+% \renewcommand{\KwSty}[1]{\textnormal{\textcolor{blue!90!black}{\ttfamily\bfseries #1}}\unskip}
+% \renewcommand{\ArgSty}[1]{\textnormal{\ttfamily #1}\unskip}
+% \DeclareRobustCommand{\percent}{{\fontfamily{jkp}\selectfont \% }}
+% \SetKwComment{Comment}{\color{green!50!black}\percent }{}
+% \renewcommand{\CommentSty}[1]{\textnormal{\ttfamily\color{green!50!black}#1}\unskip}
+% \newcommand{\assign}{\leftarrow}
+% \newcommand{\FuncCall}[2]{\texttt{\bfseries #1(#2)}}
+% \SetKwProg{Function}{def}{}{}
+% \renewcommand{\ProgSty}[1]{\texttt{\bfseries #1}}
+
+% ------------------------------------------------------------------------------------------
+% 【コード】
+% 必要パッケージ : listings, jvlisting
+% ------------------------------------------------------------------------------------------
+% \usepackage{listings,jvlisting}
+
+% \lstnewenvironment{python}[1][]{
+%     \lstset{
+%         language=Python,
+%         basicstyle={\ttfamily}, % 全体のフォント
+%         identifierstyle={\small}, % キーワードでないもののフォント
+%         commentstyle={\smallitshape}, % コメントのフォント
+%         stringstyle={\small}, % 文字のフォント
+%         keywordstyle={\small\bfseries}, %
+%         ndkeywordstyle={\small}, %
+%         stringstyle={\small\ttfamily},
+%         numberstyle={\scriptsize},
+%         numbers=left, % 左に行番号を表示
+%         stepnumber=1, % 数字がどれだけずつ増えるか
+%         numbersep=1\zw, % 数字とコードの間のスペース
+%         xleftmargin=3\zw, % 左側のスペース
+%         xrightmargin=0\zw, % 右側のスペース
+%         breaklines=true, % 長いlineは折り返す
+%         frame={lines}, % 枠の種類
+%         columns=[l]{fullflexible},
+%         lineskip=-0.5ex
+% }}{}
