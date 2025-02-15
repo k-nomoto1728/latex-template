@@ -1,0 +1,9 @@
+# This is a VS Code style code block
+def pow(a, n):
+	val = 1
+	while n != 0:
+		val *= val
+		if n & 1 == 1:
+			val *= a
+		n = n >> 1
+	return val
