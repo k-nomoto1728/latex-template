@@ -67,3 +67,31 @@
 \newtcbtheorem[use counter from=thm]{ex}{例}{TheoremStyle, GREEN}{ex}
 \newtcbtheorem[use counter from=thm]{rem}{注意}{TheoremStyle, GREEN}{rem}
 \newtcbtheorem[use counter from=thm]{conj}{予想}{TheoremStyle, GREEN}{conj}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Proof Environment                                        %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\let\oldproof\proof
+\let\endoldproof\endproof
+
+\renewenvironment{proof}[1][\proofname]{
+  \begin{tcolorbox}[
+    enhanced,
+    breakable,
+    colback=white,
+    frame hidden,
+    borderline west={1pt}{0pt}{black!50!white},
+    boxsep=0pt,
+    left=6pt,
+    before skip=6pt,
+    after skip=6pt
+  ]
+  {\textbf{#1.}\,}
+}{
+  \qed
+  \end{tcolorbox}
+}
