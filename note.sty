@@ -1,0 +1,443 @@
+%%
+%% This is file `note.sty',
+%% version 1.0, 2025/09/08
+%% Author: NOMOTO Keiichiro
+%% Created: 2025-09-08
+%% Last modified: 2025-09-08
+%% 
+%% Copyright (C) NOMOTO Keiichiro.
+%% 
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   https://www.latex-project.org/lppl.txt
+%% and version 1.3c or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%% 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Identification
+%% - LaTeX format & package information
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NeedsTeXFormat{LaTeX2e}[2024-11-01]
+\ProvidesPackage{note}[2025-09-06 v1.0 Note package]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Options
+%% - Define key–value options for customization
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{xcolor}
+\RequirePackage{kvoptions}
+
+\SetupKeyvalOptions{
+  family=note,
+  prefix=note@
+}
+
+\DeclareStringOption[000000]{color}
+\ProcessKeyvalOptions*
+
+\edef\note@basecolor{\noexpand\definecolor{note@basecolor}{HTML}{\note@color}}
+\note@basecolor
+
+\newcommand{\BaseColor}{note@basecolor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Layout settings
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Header / Footer
+% - Show section title (left) and page number (right)
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % reset
+\renewcommand{\sectionmark}[1]{\markboth{\thesection\quad #1}{}}
+\lhead{\color{\BaseColor}{\leftmark}}
+\rhead{\color{\BaseColor}{\thepage}}
+\renewcommand{\headrule}{\color{\BaseColor}\hrule height 1.5pt \vskip 0pt}
+\renewcommand{\footrule}{\color{\BaseColor}\hrule height 1.5pt \vskip 0pt}
+
+%%% Title page
+% - Custom titlepage environment (title, author, date)
+\makeatletter
+\renewcommand{\maketitle}{%
+\begin{titlepage}
+
+    \centering
+    
+    \vspace*{3cm}
+    \textcolor{\BaseColor}{\rule{\linewidth}{0.5mm}} \\[0.7cm]
+    {\Huge\bfseries\textcolor{\BaseColor}{\@title}} \\[0.3cm]
+    \textcolor{\BaseColor}{\rule{\linewidth}{0.5mm}} \\
+    
+    \vfill
+        
+    {\LARGE \@author} \\[0.5cm]
+    {\normalsize \@date} \\
+    \vspace*{2cm}
+
+\end{titlepage}%
+}
+\makeatother
+
+%%% Abstract environment
+\renewenvironment{abstract}{
+  \newpage
+  \thispagestyle{empty}
+  \vspace*{\fill}
+  \begin{center}
+    \textcolor{\BaseColor}{\rule[2mm]{2cm}{0.5mm}}\hspace{0.5cm}%
+    {\LARGE\bfseries \textcolor{\BaseColor}{概要}}\hspace{0.5cm}%
+    \textcolor{\BaseColor}{\rule[2mm]{2cm}{0.5mm}}
+  \end{center}
+  \bigskip
+}{
+  \vspace*{\fill}
+  \newpage
+}
+
+%%% Section headings
+% - Customize font, size, and spacing for section levels
+\ModifyHeading{section}{font={\color{\BaseColor}\bfseries\LARGE}, before_space=0.5cm, after_space=0.5cm}
+\ModifyHeading{subsection}{font={\color{\BaseColor}\bfseries\Large}, before_space=0.5cm, after_space=0.5cm}
+\ModifyHeading{subsubsection}{font={\color{\BaseColor}\bfseries\normalsize}, before_space=0.5cm, after_space=0.5cm}
+
+%%% Enumerate environment
+% - Customize numbering style and indentation
+\RequirePackage{enumitem}
+\renewcommand{\theenumi}{\arabic{enumi}}
+\renewcommand{\labelenumi}{(\theenumi)\,}
+\renewcommand{\theenumii}{\theenumi-\arabic{enumii}}
+\renewcommand{\labelenumii}{(\theenumii)\,}
+\setlength{\labelsep}{0.5\zw}
+\setlength{\leftmargini}{3\zw}
+
+%%% Miscellaneous
+% - Indent first paragraph / allow page breaks in display math
+\RequirePackage{indentfirst} % 段落が変わったときに字下げをする.
+\allowdisplaybreaks[4]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Math macros
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Blackboard / Calligraphic / Fraktur / Script alphabets
+\RequirePackage{amssymb}
+\RequirePackage{mathrsfs} % \mathscr 用
+\makeatletter
+\newcommand{\MyAlphabet}[1]{\@tfor\Ch@r:=#1\do{
+	\expandafter\edef\csname bb\Ch@r\endcsname{\noexpand\mathbb{\Ch@r}}
+	\expandafter\edef\csname cal\Ch@r\endcsname{\noexpand\mathcal{\Ch@r}}
+	\expandafter\edef\csname frak\Ch@r\endcsname{\noexpand\mathfrak{\Ch@r}}
+	\expandafter\edef\csname scr\Ch@r\endcsname{\noexpand\mathscr{\Ch@r}}
+}}
+\makeatother
+
+\MyAlphabet{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz}
+
+%%% Common math operators
+\makeatletter
+\newcommand{\MyMathOperators}[1]{\@for\op:=#1\do{
+	\expandafter\edef\csname\op\endcsname{\noexpand\mathop{\noexpand\mathrm{\op}}\nolimits}
+}}
+\makeatother
+
+\let\Re\relax
+\let\Im\relax
+\renewcommand{\epsilon}{\varepsilon}
+
+%%% Paired delimiters
+\RequirePackage{mathtools}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert} % | | absolute value
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} % || || norm
+\DeclarePairedDelimiter{\rbra}{\lparen}{\rparen} % () round brackets
+\DeclarePairedDelimiter{\cbra}{\lbrace}{\rbrace} % {} curly brackets
+\DeclarePairedDelimiter{\sbra}{\lbrack}{\rbrack} % [] square brackets
+\DeclarePairedDelimiter{\abra}{\langle}{\rangle} % < > angle brackets
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor} % floor function
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil} % ceil function
+
+\DeclarePairedDelimiterX{\set}[2]{\lbrace}{\rbrace}{#1\,\delimsize\vert\,#2} % { | }
+
+%%% Accents (wide versions)
+\RequirePackage{xcolor}
+\renewcommand{\bar}[1]{\overline{#1}}
+\renewcommand{\tilde}[1]{\widetilde{#1}}
+\renewcommand{\hat}[1]{\widehat{#1}}
+
+%%% Equation numbering
+\RequirePackage{mathtools}
+\mathtoolsset{showonlyrefs=true}
+
+%%% Special symbols
+% - Sha symbol (Tate-–Shafarevich group)
+\RequirePackage[OT2,T1]{fontenc}
+\DeclareSymbolFont{cyrletters}{OT2}{wncyr}{m}{n}
+\DeclareMathSymbol{\Sha}{\mathalpha}{cyrletters}{"58}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Theorem environments
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% tcolorbox theorem styles
+\RequirePackage{tcolorbox}
+\tcbuselibrary{breakable,skins,theorems}
+
+\tcbset{
+	NoteStyle/.style={
+		% ---- 4.5 Colors and Fonts
+		fonttitle=\rmfamily\bfseries\upshape,
+		% ---- 4.7.2 Rules
+		boxrule=0pt,
+		% ---- 4.7.4 Spacing
+		left=1\zw,
+		right=1\zw,
+		% ---- 4.8 Corners
+		% sharp corners=all,
+		% ---- 4.11 Box Content Additions
+		before upper={\setlength{\parindent}{1\zw}},
+		before lower={\setlength{\parindent}{1\zw}},
+		% ---- 4.14 Embedding into the Surroundings
+		before skip=10pt,
+		after skip=10pt,
+		% ---- 11.2 Skin Family "enhanced"
+		enhanced,
+		% ---- 19.3 Main Option Keys
+		breakable,
+		colframe=\BaseColor,
+		colback=\BaseColor!2!white,
+		colbacktitle=\BaseColor,
+		label is zlabel,
+	}
+}
+
+%%% Theorem-like environments
+\newtcbtheorem[number within=section]{thm}{定理}{NoteStyle, label type=theorem}{thm}
+\newtcbtheorem[use counter from=thm]{lem}{補題}{NoteStyle, label type=lemma}{lem}
+\newtcbtheorem[use counter from=thm]{prop}{命題}{NoteStyle, label type=proposition}{prop}
+\newtcbtheorem[use counter from=thm]{cor}{系}{NoteStyle, label type=corollary}{cor}
+\newtcbtheorem[use counter from=thm]{defi}{定義}{NoteStyle,label type=definition}{defi}
+\newtcbtheorem[use counter from=thm]{ex}{例}{NoteStyle, label type=example}{ex}
+\newtcbtheorem[use counter from=thm]{rem}{注意}{NoteStyle, label type=remark}{rem}
+\newtcbtheorem[use counter from=thm]{conj}{予想}{NoteStyle, label type=conjecture}{conj}
+
+%%% Proof environment
+\tcolorboxenvironment{proof}{
+	enhanced,
+	breakable,
+	colback=white,
+	frame hidden,
+	borderline west={1pt}{0pt}{\BaseColor},
+	boxsep=0pt,
+	left=6pt,
+	before skip=5pt,
+	after skip=20pt,
+  before upper=\setlength{\parindent}{1\zw},
+}
+
+\renewcommand{\qedsymbol}{\textcolor{\BaseColor}{\ensuremath{\blacksquare}}}
+
+\makeatletter
+\renewenvironment{proof}[1][証明]{%
+  \par\pushQED{\qed}\normalfont
+  \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep
+        \bfseries\color{\BaseColor}#1\@addpunct{.}]%
+  \ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+\makeatother
+
+%%% Clever references (Japanese)
+\RequirePackage{zref-clever}
+\zcDeclareLanguage[allcaps]{japanese}
+\zcLanguageSetup{japanese}{
+  namesep   = {\nobreak} ,
+  pairsep   = {と} ,
+  listsep   = {、} ,
+  lastsep   = {、および} ,
+  tpairsep  = {および} ,
+  tlistsep  = {、} ,
+  tlastsep  = {、および} ,
+  notesep   = {：} ,
+  rangesep  = {から} ,
+  type = book ,
+    Name-sg = 第 ,
+    Name-pl = 第 ,
+    refbounds = {,,編,},
+  type = part ,
+    Name-sg = 第 ,
+    Name-pl = 第 ,
+    refbounds = {,,部,},
+  type = chapter ,
+    Name-sg = 第 ,
+    Name-pl = 第 ,
+    refbounds = {,,章,} ,
+  type = section ,
+    Name-sg = 第 ,
+    Name-pl = 第 ,
+    refbounds = {,,節,} ,
+  type = paragraph ,
+    Name-sg = 第 ,
+    Name-pl = 第 ,
+    refbounds = {,,段落,} ,
+  type = appendix ,
+    Name-sg = 付録 ,
+    Name-pl = 付録 ,
+  type = page ,
+    Name-sg = p. ,
+    Name-pl = pp. ,
+    rangesep = \textendash ,
+    rangetopair = false ,
+  type = line ,
+    Name-sg = l. ,
+    Name-pl = l. ,
+    rangesep = \textendash ,
+    rangetopair = false ,
+  type = figure ,
+    Name-sg = 図 ,
+    Name-pl = 図 ,
+  type = table ,
+    Name-sg = 表 ,
+    Name-pl = 表 ,
+  type = item ,
+    Name-sg = 項目 ,
+    Name-pl = 項目 ,
+  type = footnote ,
+    Name-sg = 脚注 ,
+    Name-pl = 脚注 ,
+  type = endnote ,
+    Name-sg = 後注 ,
+    Name-pl = 後注 ,
+  type = note ,
+    Name-sg = 注意 ,
+    Name-pl = 注意 ,
+  type = equation ,
+    Name-sg = 式 ,
+    Name-pl = 式 ,
+    refbounds = {,(,),} ,
+  type = theorem ,
+    Name-sg = 定理 ,
+    Name-pl = 定理 ,
+  type = lemma ,
+    Name-sg = 補題 ,
+    Name-pl = 補題 ,
+  type = corollary ,
+    Name-sg = 系 ,
+    Name-pl = 系 ,
+  type = proposition ,
+    Name-sg = 命題 ,
+    Name-pl = 命題 ,
+  type = definition ,
+    Name-sg = 定義 ,
+    Name-pl = 定義 ,
+  type = proof ,
+    Name-sg = 証明 ,
+    Name-pl = 証明 ,
+  type = result ,
+    Name-sg = 結果 ,
+    Name-pl = 結果 ,
+  type = remark ,
+    Name-sg = 備考 ,
+    Name-pl = 備考 ,
+  type = example ,
+    Name-sg = 例 ,
+    Name-pl = 例 ,
+  type = algorithm ,
+    Name-sg = アルゴリズム ,
+    Name-pl = アルゴリズム ,
+  type = listing ,
+    Name-sg = コード ,
+    Name-pl = コード ,
+  type = exercise ,
+    Name-sg = 演習 ,
+    Name-pl = 演習 ,
+  type = solution ,
+    Name-sg = 解法 ,
+    Name-pl = 解法 ,
+}
+\zcsetup{ lang = japanese }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Hyperlinks
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% PDF/bookmark/xurl settings
+\RequirePackage{bookmark}
+\RequirePackage{xurl}
+\RequirePackage{hyperref}
+
+\hypersetup{
+    unicode,
+    bookmarksnumbered=true,
+    hidelinks,
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Bibliography 
+%% - BibLaTeX setup for Japanese/English mixed documents
+%% - http://granular.blog39.fc2.com/blog-entry-76.html 
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage[
+	style=numeric,
+	sorting=nyt,
+	maxnames=99,
+	minnames=1,
+	arxiv=abs,
+	isbn=false,
+	url=false,
+	doi=false,
+	giveninits=true,
+]{biblatex}
+
+\newbibmacro*{finalnamedelim:{japanese}}{%
+  \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
+  \addspace\multinamedelim
+}
+
+\renewcommand*{\finalnamedelim}{%
+  \iflistundef{language}
+  {\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
+  \addspace\bibstring{and}\space}
+  {\usebibmacro*{finalnamedelim:\strlist{language}}}
+}
+
+\newbibmacro*{name:given-family:{japanese}}[4]{%
+  \usebibmacro{name:delim}{#1#2}\usebibmacro{name:hook}{#1#2}#1\bibnamedelimc#2}
+
+\DeclareNameFormat{given-family}{%
+  \iflistundef{language}{%
+    \ifgiveninits
+      {\usebibmacro{name:given-family}{\namepartfamily}{\namepartgiveni}{\namepartprefix}{\namepartsuffix}}
+      {\usebibmacro{name:given-family}{\namepartfamily}{\namepartgiven}{\namepartprefix}{\namepartsuffix}}
+  }
+  {\usebibmacro*{name:given-family:\strlist{language}}{\namepartfamily}{\namepartgiven}{\namepartprefix}{\namepartsuffix}}
+  \usebibmacro{name:andothers}
+}
+
+\DeclareFieldFormat*{title}{\textrm{#1}}
+\DeclareFieldFormat*{journaltitle}{\textrm{#1}}
+\DeclareFieldFormat*{booktitle}{\textrm{#1}}
+
+%%
+%% End of file `note.sty'.
