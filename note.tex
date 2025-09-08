@@ -1,0 +1,294 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Document class                                           %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[
+	paper=a4,
+	fontsize=10pt, % 欧文フォントサイズ
+	jafontsize=12Q,
+	jafontscale=0.92,
+]{jlreq}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Layout                                                   %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{geometry}
+\geometry{
+	paper=a4paper,
+	left=1.5cm,
+	right=1.5cm,
+	top=2.5cm,
+	bottom=2.5cm,
+	headheight=2.5cm,
+	footskip=1cm,
+	% showframe, % for checking the layout
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Standard packages                                        %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{anyfontsize}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{cd}
+\usepackage{tikz-3dplot}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{clock}
+\usepackage{xcolor}
+
+\usepackage{lipsum} % 例文生成用
+\usepackage[base]{babel} % 例文生成用
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Additional packages                                      %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[color=223670]{note}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Color                                                    %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{BLUE}{HTML}{223670}
+\definecolor{RED}{HTML}{862040}
+\definecolor{GREEN}{HTML}{006036}
+
+\newcommand{\BLUE}[1]{\textcolor{BLUE}{#1}}
+\newcommand{\RED}[1]{\textcolor{RED}{#1}}
+\newcommand{\GREEN}[1]{\textcolor{GREEN}{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Math Operators                                           %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\MyMathOperators{Re,Im,Ker,Coker,Hom,End,Aut,Gal,Spec,Frac,rank,sgn,Reg,Sel,Cl,lcm,gcd}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Bibliography                                             %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliography{refs.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Title page                                               %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{\texttt{note.sty} 概要}
+\author{野本 慶一郎}
+\date{最終更新: \today \texthours 時 \textminutes 分 \clocktime}
+
+
+\begin{document}
+\maketitle
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                             %
+%    Content                                                  %
+%                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract}
+	本稿では, 勉強ノート用に作成した \LaTeX のスタイルファイル\texttt{note.sty}の概要を説明する.
+	\lipsum[1-2]
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% --------------------------------------------------
+\section{スタイルファイルの読み込みと色設定}
+% --------------------------------------------------
+
+\texttt{note.sty} を読み込むには，プリアンブルに
+\begin{center}
+  \verb|\usepackage[color=<16進カラーコード>]{note}|
+\end{center}
+と書く. 色はHTML形式の16進カラーコードで指定できる.
+
+例えば本稿では紺色「223670」を指定している.
+特にオプションを指定せず \verb|\usepackage{note}| と書いた場合は，
+黒色（000000）が設定される.
+\\
+
+ちなみに\texttt{note.sty}では以下のパッケージを読み込んでいる(読み込み順に記す).
+\begin{center}
+	\texttt{xcolor, kvoptions, color, fancyhdr, enumitem, indentfirst, amssymb, mathrsfs, mathtools, fontenc, tcolorbox, zref-clever, bookmark, xurl, hyperref, biblatex}
+\end{center}
+
+% --------------------------------------------------
+\section{数学マクロ}
+% --------------------------------------------------
+
+本スタイルファイルでは，数式入力を簡単にするためのマクロを追加している．
+
+\subsection{ブラックボード・カリグラフィック・フラクタル・スクリプト}
+
+\texttt{amsmath.sty}や\texttt{mathrsfs.sty}が提供してくれる以下のアルファベットは, 全て簡潔に書くためのマクロを用意した.
+\begin{itemize}
+    \item \verb|\mathbb{Z}| → \verb|\bbZ|
+    \item \verb|\mathcal{C}| → \verb|\calC|
+    \item \verb|\mathfrak{p}| → \verb|\frakp|
+    \item \verb|\mathscr{F}| → \verb|\scrF|
+\end{itemize}
+
+\begin{ex}{}{}
+	\begin{align}
+		\bbZ, \quad \calC, \quad \frakp, \quad \scrF.
+	\end{align}
+\end{ex}
+
+\subsection{数学作用素}
+
+プリアンブルに \verb|\MyMathOperators{}| と記入し, 要素として\texttt{Ker}等の数学作用素を入れると \verb|\mathop{Ker}| を定義したのと同じことになる.
+例えば
+\begin{center}
+	\verb|\MyMathOperators{Ker,Hom,Gal,Spec,rank}|
+\end{center}
+とプリアンブルに書いたとすると
+\begin{align}
+	\Ker f, \quad \Hom(E_1, E_2), \quad \Gal(L/K), \quad \Spec \bbC[x], \quad \rank E(\bbQ)
+\end{align}
+のように書くことができる.
+
+\begin{rem}{}{}
+	数学作用素の間に
+	\begin{center}
+		\verb|\MyMathOperators{Ker, Hom, Gal, Spec, rank}|
+	\end{center}
+	のような半角スペースを入れるとエラーが生じる(いつか直します).
+\end{rem}
+
+\subsection{括弧・絶対値・集合マクロ}
+
+絶対値や括弧を始めとする様々な記号は以下のように書く.
+
+\begin{itemize}
+    \item \verb|\abs{x}| : 絶対値
+    \item \verb|\norm{x}| : ノルム
+    \item \verb|\rbra{x}| : 丸括弧
+    \item \verb|\cbra{x}| : 波括弧
+    \item \verb|\sbra{x}| : 角括弧
+    \item \verb|\abra{x}| : 内積/角括弧
+    \item \verb|\floor{x}| : 床関数
+    \item \verb|\ceil{x}| : 天井関数
+    \item \verb|\set{x\in X}{P(x)}| : 集合
+\end{itemize}
+
+\begin{rem}{}{}
+	マクロ名の後に「\texttt{*}」を付けないと括弧等のサイズが変わらなくて不恰好になる:
+	\begin{align}
+		\rbra{\frac{b}{a}}, \quad \rbra*{\frac{b}{a}}.
+	\end{align}
+\end{rem}
+
+\subsection{アクセント}
+
+長い数式に対して通常のアクセント「\verb|\bar{}, \tilde{}, \hat{}|」を付けても, 長さが不十分で不恰好となってしまう.
+したがって\texttt{note.sty}では\texttt{renewcommand}を用いて, それぞれ「\verb|\overline{}, \widetilde{}, \widehat{}|」が実行されるように再設定している.
+
+\begin{ex}{}{}
+	\begin{align}
+		\bar{a+bi}=a-bi.
+	\end{align}
+\end{ex}
+
+\subsection{数式番号}
+
+数式番号は, 引用した数式にのみ付くようにしている(\texttt{mathtools.sty}の\texttt{showonlyrefs}を使用).
+
+\begin{ex}{}{}
+	式
+	\begin{align}
+		e^{i\pi}+1=0 \label{Euler}
+	\end{align}
+	はヤバい. \zcref{Euler}はオイラーの等式と呼ばれる.
+\end{ex}
+
+\subsection{定理環境}
+
+定理環境は
+\begin{center}
+	\verb|\begin{<定理環境名>}{<説明>}{<ラベル>} \end{<定理環境名>}|
+\end{center}
+の形で記述する. \verb|定理環境名|には
+\begin{center}
+	定理(thm), 補題(lem), 命題(prop), 系(cor), 定義(defi), 例(ex), 注意(rem), 予想(conj)
+\end{center}
+が使用できる. \verb|<説明>|の箇所は, 定理名(準同型定理, 群の定義など)や引用先(\cite[定理1.3, p.5]{本引用ラベル})を書くことができる.
+\verb|<ラベル>|にはその環境のラベル名を記入する.
+
+\begin{thm}{Homomorphism Theorem}{HomThm}
+	$f: G\to H$を群準同型とする. このとき$f$から誘導される写像
+	\begin{align}
+		\tilde{f}: G/\Ker f\to \Im f, \ x\Ker f\mapsto f(x)\label{HomThm-1}
+	\end{align}
+	は同型写像である.
+\end{thm}
+\begin{proof}
+	まず$\tilde{f}$がwell-definedであることを示す. $x\Ker f, y\Ker f\in G/\Ker f$に対して$x\Ker f=y\Ker f$と仮定する. このとき$xy^{-1}\in \Ker f$であり, $f$は群準同型なので
+	\begin{align}
+		f(x)f(y)^{-1}=f(xy^{-1})=e
+	\end{align}
+	が成り立つ. したがって$f(x)=f(y)$であるから$f$はwell-definedである.
+
+	次に$\tilde{f}$が全単射であることを示す. 全射であることは明らかなので, 単射性のみ示せばよい.
+	任意に$f(x), f(y)\in \Im f \ (x, y\in G)$を取り, $f(x)=f(y)$と仮定する.
+	このとき$f$は群準同型なので
+	\begin{align}
+		f(xy^{-1})=f(x)f(y)^{-1}=e
+	\end{align}
+	であるから$xy^{-1}\in \Ker f$となる. したがって$x\Ker f=y\Ker f$, すなわち$\tilde{f}$は単射である.
+
+	最後に$\tilde{f}$が群準同型であることを示す. 任意に$x\Ker f, y\Ker f\in G/\Ker f$を取る. このとき
+	\begin{align}
+		\tilde{f}((x\Ker f)(y\Ker f))
+		&=\tilde{f}(xy\Ker f) \quad (\because \text{剰余類における演算の定義})\\
+		&=f(xy) \quad (\because \text{$\tilde{f}$の定義})\\
+		&=f(x)f(y) \quad (\because \text{$f$は群準同型})\\
+		&=\tilde{f}(x\Ker f)\tilde{f}(y\Ker f) \quad (\because \text{$\tilde{f}$の定義})
+	\end{align}
+	であるから確かに$\tilde{f}$は群準同型である. これで\zcref{HomThm}の\zcref{HomThm-1}が同型写像であることが証明できた.
+\end{proof}
+
+通常, 定理や式番号を引用する際は「\verb|定理\ref{HomThm}|, \verb|式\eqref{HomThm-1}|」と書くが
+\texttt{zref-clever.sty}を読み込んでいるので, 簡潔に「\verb|\zcref{HomThm}|や\verb|\zcref{HomThm-1}|」のように引用できる.
+また, この簡潔な引用方法を取ることで仮に(定理じゃなくて命題でいいかも...)と思ったときでも, ラベル名や引用文は一切変更せず環境名を変えるだけで済む.
+
+\section{終わりに}
+
+この\texttt{note.sty}は発展途上である.
+バグや, この機能追加してほしい等あれば遠慮なく連絡していただけると幸いである.
+\\
+
+\lipsum[2-3]
+
+% --------------------------------------------------
+
+\newpage
+\nocite{*}
+\printbibliography[title=参考文献]
+
+\end{document}
+
