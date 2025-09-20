@@ -1,9 +1,9 @@
 %%
 %% This is file `note.sty',
-%% version 1.0, 2025/09/08
+%% version 1.1, 2025/09/21.
+%% 
 %% Author: NOMOTO Keiichiro
 %% Created: 2025-09-08
-%% Last modified: 2025-09-08
 %% 
 %% Copyright (C) NOMOTO Keiichiro.
 %% 
@@ -373,6 +373,43 @@
     Name-pl = 解法 ,
 }
 \zcsetup{ lang = japanese }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Source Code for Python(sage)
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{tcolorbox}
+\tcbuselibrary{listings,minted}
+
+\tcbset{
+	PythonStyle/.style 2 args={
+    fonttitle=\rmfamily\bfseries\upshape,
+    boxrule=0pt,
+    left=1\zw,
+		right=1\zw,
+    sharp corners=all,
+    before upper={\setlength{\parindent}{1\zw}},
+		before lower={\setlength{\parindent}{1\zw}},
+    before skip=10pt,
+		after skip=10pt,
+    enhanced,
+    breakable,
+    colframe=\BaseColor,
+    colback=\BaseColor!2!white,
+    colbacktitle=\BaseColor,
+    label is zlabel,
+    label separator={},
+    label type=listing,
+    listing only,
+    listing options={basicstyle=\ttfamily},
+    title={コード \thetcbcounter: #1},
+    label={#2},
+	}
+}
+
+\newtcblisting[use counter from=thm]{pycode}[3][]{PythonStyle={#2}{#3},#1}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 
