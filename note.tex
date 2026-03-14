@@ -2,6 +2,9 @@
 %                                                             %
 %    Document class                                           %
 %                                                             %
+%    - When typesetting with uplatex,                         %
+%      specify the options `uplatex` and `dvipdfmx`.          %
+%                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[
@@ -54,9 +57,12 @@
 %                                                             %
 %    Additional packages                                      %
 %                                                             %
+%    - To enable the title page,                              %
+%      specify the option `titlepage`.                        %
+%                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage[color=223670]{note}
+\usepackage[color=223670, titlepage]{note}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                             %
@@ -82,11 +88,11 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                             %
-%    Bibliography                                             %
+%    Bibliography (Recommended: Biber + BibLaTeX)             %
 %                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\bibliography{refs.bib}
+\addbibresource{refs.bib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                             %
@@ -116,6 +122,8 @@
 
 \tableofcontents
 \newpage
+
+\part{テストです}
 
 % --------------------------------------------------
 \section{スタイルファイルの読み込みと色設定}
@@ -282,14 +290,14 @@
 以下はその例である.
 
 \begin{pycode}{繰り返し二乗法}{Power}
-	def power(base, exp):
-			result = 1
-			while exp != 0:
-					if exp & 1 == 1:
-							result *= base
-					base *= base
-					exp >>= 1
-			return result
+def power(base, exp):
+	result = 1
+	while exp != 0:
+		if exp & 1 == 1:
+			result *= base
+		base *= base
+		exp >>= 1
+	return result
 \end{pycode}
 
 もちろんコード番号は定理等と同様に\zcref{Power}と引用できる.

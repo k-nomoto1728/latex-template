@@ -1,6 +1,6 @@
 %%
 %% This is file `note.sty',
-%% version 1.1, 2025/09/21.
+%% version 1.2, 2026/03/14.
 %% 
 %% Author: NOMOTO Keiichiro
 %% Created: 2025-09-08
@@ -24,7 +24,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}[2024-11-01]
-\ProvidesPackage{note}[2025-09-06 v1.0 Note package]
+\ProvidesPackage{note}[2026-03-14 v1.2 Note package]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 
@@ -42,6 +42,7 @@
 }
 
 \DeclareStringOption[000000]{color}
+\DeclareBoolOption[false]{titlepage}
 \ProcessKeyvalOptions*
 
 \edef\note@basecolor{\noexpand\definecolor{note@basecolor}{HTML}{\note@color}}
@@ -70,7 +71,9 @@
 % - Custom titlepage environment (title, author, date)
 \makeatletter
 \renewcommand{\maketitle}{%
-\begin{titlepage}
+\ifnote@titlepage
+  % ----- titlepage version -----
+  \begin{titlepage}
 
     \centering
     
@@ -85,12 +88,32 @@
     {\normalsize \@date} \\
     \vspace*{2cm}
 
-\end{titlepage}%
+  \end{titlepage}
+
+\else
+  % ----- normal version -----
+  \thispagestyle{empty}
+  \begin{center}
+
+    \medskip
+    
+    {\huge\bfseries\textcolor{\BaseColor}{\@title}} \\[0.5cm]
+    {\normalsize \@author} \\[0.2cm]
+    {\normalsize \@date} \\
+
+    \bigskip
+
+  \end{center}
+  \medskip
+\fi
 }
 \makeatother
 
 %%% Abstract environment
+\makeatletter
 \renewenvironment{abstract}{
+\ifnote@titlepage
+  % ----- abstract page version -----
   \newpage
   \thispagestyle{empty}
   \vspace*{\fill}
@@ -99,14 +122,31 @@
     {\LARGE\bfseries \textcolor{\BaseColor}{概要}}\hspace{0.5cm}%
     \textcolor{\BaseColor}{\rule[2mm]{1cm}{0.5mm}}
   \end{center}
-  \bigskip
+  \medskip
+\else
+  % ----- normal version -----
+  \begin{center}
+    \textcolor{\BaseColor}{\rule[1.1mm]{0.3cm}{0.2mm}}\hspace{0.2cm}%
+    {\large\bfseries \textcolor{\BaseColor}{概要}}\hspace{0.2cm}%
+    \textcolor{\BaseColor}{\rule[1.1mm]{0.3cm}{0.2mm}}
+  \end{center}
+\fi
+\par
+\@afterindenttrue
+\@afterheading
 }{
+\ifnote@titlepage
   \vspace*{\fill}
   \newpage
+\else
+  \bigskip
+\fi
 }
+\makeatother
 
 %%% Section headings
 % - Customize font, size, and spacing for section levels
+\ModifyHeading{part}{font={\color{\BaseColor}\bfseries\LARGE}, before_space=0.5cm, after_space=0.5cm}
 \ModifyHeading{section}{font={\color{\BaseColor}\bfseries\LARGE}, before_space=0.5cm, after_space=0.5cm}
 \ModifyHeading{subsection}{font={\color{\BaseColor}\bfseries\Large}, before_space=0.5cm, after_space=0.5cm}
 \ModifyHeading{subsubsection}{font={\color{\BaseColor}\bfseries\normalsize}, before_space=0.5cm, after_space=0.5cm}
@@ -381,7 +421,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \RequirePackage{tcolorbox}
-\tcbuselibrary{listings,minted}
+\tcbuselibrary{listings}
 
 \tcbset{
 	PythonStyle/.style 2 args={
@@ -403,7 +443,7 @@
     label separator={},
     label type=listing,
     listing only,
-    listing options={basicstyle=\ttfamily},
+    listing options={basicstyle=\ttfamily\small},
     title={コード \thetcbcounter: #1},
     label={#2},
 	}
@@ -441,12 +481,23 @@
 	sorting=nyt,
 	maxnames=99,
 	minnames=1,
-	arxiv=abs,
 	isbn=false,
 	url=false,
 	doi=false,
 	giveninits=true,
 ]{biblatex}
+
+% ---- remove "in:" and year from middle ----
+\renewbibmacro{in:}{}
+\renewbibmacro*{issue+date}{}
+
+% ---- print year at the end ----
+\renewbibmacro*{finentry}{%
+  \setunit{\addspace}%
+  \printtext{\mkbibparens{\printfield{year}}}%
+  \adddot%
+  \finentrypunct
+}
 
 \newbibmacro*{finalnamedelim:{japanese}}{%
   \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
