@@ -1,0 +1,86 @@
+#!/usr/bin/env perl
+
+####################################################################################################
+#
+#   file          .latexmkrc
+#   author        NOMOTO Keiichiro
+#   created_at    2022.06.11
+#   modified_at   2026.03.14
+# 
+####################################################################################################
+
+####################################################################################################
+#
+#   LaTeX engines
+#
+#   -file-line-error    : disable/enable file-line-error style messages
+#   -halt-on-error      : stop processing at the first error
+#   -interaction=STRING : set interaction mode - batchmode, nonstopmode, scrollmode or errorstopmode
+#   -shell-escape       : disable/enable system calls
+#   -synctex=NUMBER     : enable synctex
+# 
+####################################################################################################
+
+$lualatex = 'lualatex -file-line-error -halt-on-error -interaction=nonstopmode -shell-escape -synctex=1 %O %S';
+$latex    = 'uplatex -file-line-error -halt-on-error -interaction=nonstopmode -shell-escape -synctex=1 -kanji=utf8 %O %S';
+
+####################################################################################################
+#
+#   DVI -> PDF (when use typeset by uplatex)
+#
+#   pdf_mode=3:
+#       generate a pdf version of the document from the dvi file,
+#       by using the command specified by the $dvipdf variable.
+# 
+####################################################################################################
+
+$pdf_mode = 3;
+$dvipdf   = 'dvipdfmx %O -o %D %S';
+
+####################################################################################################
+#
+#   Bibliography
+#
+####################################################################################################
+
+$bibtex = 'upbibtex %O %B';
+$biber  = 'biber -u -U --output_safechars %O %B';
+
+####################################################################################################
+#
+#   Compilation
+#
+####################################################################################################
+
+$max_repeat = 5;
+
+####################################################################################################
+#
+#   Output directories and final PDF handling
+#
+#   $aux_dir :
+#       directory where auxiliary files (.aux, .log, .bbl, etc.) are stored.
+#
+#   $out_dir :
+#       directory where compilation outputs are generated.
+#
+#   The END block moves the generated PDF from the auxiliary directory
+#   to the project root directory and removes any remaining PDFs in aux/.
+#
+####################################################################################################
+
+$aux_dir = 'aux';
+$out_dir = 'aux';
+
+END {
+    my $pdf = "$root_filename.pdf";
+
+    if (-e "aux/$pdf") {
+        rename "aux/$pdf", $pdf
+            or warn "Cannot move aux/$pdf to $pdf: $!";
+    }
+
+    for my $f (glob("aux/*.pdf")) {
+        unlink $f or warn "Cannot remove $f: $!";
+    }
+}
