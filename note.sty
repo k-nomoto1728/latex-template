@@ -492,6 +492,9 @@
 \renewbibmacro*{issue+date}{}
 
 % ---- print year at the end ----
+\renewbibmacro*{publisher+location+date}{%
+  \printlist{publisher}%
+}
 \renewbibmacro*{finentry}{%
   \setunit{\addspace}%
   \printtext{\mkbibparens{\printfield{year}}}%
