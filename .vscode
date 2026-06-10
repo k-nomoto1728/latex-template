@@ -1,0 +1,42 @@
+{
+  // -------------------- Extention: LaTeX Workshop --------------------
+  "latex-workshop.latex.tools": [
+    {
+      "name": "Latexmk (LuaLaTeX)",
+      "command": "latexmk",
+      "args": [
+        "-lualatex",
+        "-cd",
+        "%RELATIVE_DOC%"
+      ]
+    },
+    {
+      "name": "Latexmk (upLaTeX)",
+      "command": "latexmk",
+      "args": [
+        "-lualatex",
+        "-cd",
+        "%RELATIVE_DOC%"
+      ]
+    },
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "LuaLaTeX",
+      "tools": [
+        "Latexmk (LuaLaTeX)"
+      ]
+    },
+    {
+      "name": "upLaTeX",
+      "tools": [
+        "Latexmk (upLaTeX)"
+      ]
+    },
+  ],
+  "latex-workshop.intellisense.package.enabled": true,
+  "latex-workshop.message.error.show": false,
+  "latex-workshop.message.warning.show": false,
+  "latex-workshop.latex.clean.method": "glob",
+  "latex-workshop.latex.autoBuild.run": "never",
+}
