@@ -1,0 +1,55 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+% --------------------------------------------------
+\section{core.sty}
+% --------------------------------------------------
+
+\texttt{core.sty}は, 他のスタイルファイルから共通して使う基本設定をまとめたファイルである. 
+数式, 図, 色, 分割コンパイルなど, 多くの節で前提となるパッケージをここで読み込んでいる. 
+
+\subsection{基本パッケージ}
+
+本文全体で使うパッケージとして, \texttt{amsmath}, \texttt{amsthm}, \texttt{graphicx}, \texttt{subfiles}, \texttt{xcolor}などを読み込んでいる. 
+これにより, 数式環境, 証明環境, 画像挿入, ファイル分割, 色指定が最初から使える. 
+
+図式や図の作成には\texttt{tikz}を使用する. 
+また, \texttt{tikz-cd}, \texttt{tikz-3dplot}, \texttt{pgfplots}も読み込んでいるので, 可換図式, 3次元図, グラフ描画も同じテンプレート内で扱える. 
+
+この説明文自体も\texttt{subfiles}を使って分割している. 
+たとえば\texttt{doc/math.tex}のような部分ファイルは, 単独でも親ファイル\texttt{main.tex}からでもコンパイルしやすい形になっている. 
+
+\subsection{色の設定}
+
+テンプレートで使う色は, まずHTMLカラーとして定義している. 
+\begin{itemize}
+	\item \verb|WHITE| : 背景色として使う白
+	\item \verb|BLACK| : 本文色として使う黒
+	\item \verb|BLUE| : 見出し, リンク, 定理環境などで使うアクセント色
+	\item \verb|GREEN| : コード中のコメントなどで使う色
+	\item \verb|ORANGE| : コード中の文字列などで使う色
+\end{itemize}
+
+実際のスタイルファイルでは, これらの色を直接使うのではなく, 次のような名前を通して参照している. 
+\begin{itemize}
+	\item \verb|\BaseColor| : ページ背景や証明環境の背景色
+	\item \verb|\TextColor| : 本文の基本色
+	\item \verb|\AccentColor| : 見出し, ページ番号, 証明記号などの強調色
+	\item \verb|\ThmColor|, \verb|\LemColor|, \verb|\PropColor|, \verb|\CorColor| : 定理系環境の色
+	\item \verb|\DefiColor|, \verb|\ExColor|, \verb|\RemColor| : 定義, 例, 注意環境の色
+\end{itemize}
+
+たとえばアクセント色だけを変更したい場合は, プリアンブルで
+\begin{center}
+	\verb|\renewcommand{\AccentColor}{ORANGE}|
+\end{center}
+のように再定義すればよい. 
+定理や定義の色を別々にしたい場合も, 同じように対応するコマンドを再定義できる. 
+
+\subsection{数式表示の余白}
+
+\texttt{core.sty}では, 複数行の数式がページをまたげるように\verb|\allowdisplaybreaks[4]|を指定している. 
+また, 別行立て数式の上下の余白をそれぞれ\texttt{12pt}に設定している. 
+長い計算を含むノートでも, 数式の間隔が大きくなりすぎないようにするための設定である. 
+
+\end{document}

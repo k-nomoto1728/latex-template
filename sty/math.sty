@@ -1,0 +1,92 @@
+% math.sty
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    packages                                                                                      %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{amssymb}
+\RequirePackage{mathrsfs}
+\RequirePackage{mathtools}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    alphabets                                                                                     %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\newcommand{\MyAlphabet}[1]{\@tfor\Ch@r:=#1\do{
+	\expandafter\edef\csname bb\Ch@r\endcsname{\noexpand\mathbb{\Ch@r}}
+	\expandafter\edef\csname cal\Ch@r\endcsname{\noexpand\mathcal{\Ch@r}}
+	\expandafter\edef\csname frak\Ch@r\endcsname{\noexpand\mathfrak{\Ch@r}}
+	\expandafter\edef\csname scr\Ch@r\endcsname{\noexpand\mathscr{\Ch@r}}
+}}
+\makeatother
+
+\MyAlphabet{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    math operators                                                                                %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\newcommand{\MyMathOperators}[1]{\@for\op:=#1\do{
+	\expandafter\edef\csname\op\endcsname{\noexpand\mathop{\noexpand\mathrm{\op}}\nolimits}
+}}
+\makeatother
+
+\let\Re\relax
+\let\Im\relax
+\renewcommand{\epsilon}{\varepsilon}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    paired delimiters                                                                             %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert} % | | absolute value
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} % || || norm
+\DeclarePairedDelimiter{\rbra}{\lparen}{\rparen} % () round brackets
+\DeclarePairedDelimiter{\cbra}{\lbrace}{\rbrace} % {} curly brackets
+\DeclarePairedDelimiter{\sbra}{\lbrack}{\rbrack} % [] square brackets
+\DeclarePairedDelimiter{\abra}{\langle}{\rangle} % < > angle brackets
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor} % floor function
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil} % ceil function
+
+\DeclarePairedDelimiterX{\set}[2]{\lbrace}{\rbrace}{#1\,\delimsize\vert\,#2} % { | }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    accents                                                                                       %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\bar}[1]{\overline{#1}}
+\renewcommand{\tilde}[1]{\widetilde{#1}}
+\renewcommand{\hat}[1]{\widehat{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    equation numbering                                                                            %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\mathtoolsset{showonlyrefs=true}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    special symbols                                                                               %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage[OT2,T1]{fontenc}
+\DeclareSymbolFont{cyrletters}{OT2}{wncyr}{m}{n}
+\DeclareMathSymbol{\Sha}{\mathalpha}{cyrletters}{"58}
+
+
+

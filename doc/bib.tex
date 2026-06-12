@@ -1,0 +1,61 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+% --------------------------------------------------
+\section{bib.sty}
+% --------------------------------------------------
+
+\texttt{bib.sty}では, 文献管理に\texttt{biblatex}を使うための設定をまとめている. 
+このテンプレートでは, 本文中の引用を番号形式で表示し, 文献一覧を日本語と英語が混ざったノートでも読みやすい形に整えることを目指している. 
+
+\subsection{読み込み設定}
+
+\texttt{biblatex}は次の方針で読み込んでいる. 
+\begin{itemize}
+	\item \texttt{style=numeric} : 本文中の引用を番号形式にする. 
+	\item \texttt{sorting=nyt} : 著者名, 年, タイトルの順に文献一覧を並べる. 
+	\item \texttt{maxnames=99} : 著者名をできるだけ省略せずに表示する. 
+	\item \texttt{isbn=false, url=false, doi=false} : ISBN, URL, DOIは表示しない. 
+	\item \texttt{giveninits=true} : 欧文著者名の名をイニシャルで表示する. 
+\end{itemize}
+
+文献データベースは, プリアンブルで
+\begin{center}
+	\verb|\addbibresource{bib/refs.bib}|
+\end{center}
+のように指定する. 
+本文中では通常の\texttt{biblatex}と同じく\verb|\cite|を使う. 
+
+\begin{ex}{}{}
+	本は\cite{本引用ラベル}, 論文は\cite{論文引用ラベル}のように引用できる. 
+\end{ex}
+
+文献一覧を出力する場所には
+\begin{center}
+	\verb|\printbibliography[title=参考文献]|
+\end{center}
+と書く. 
+
+\subsection{表示形式の調整}
+
+文献番号と項目本文の間隔は\verb|\biblabelsep|で調整している. 
+また, 文献一覧では英語圏の形式で出やすい\texttt{in:}を表示しないようにしている. 
+
+年は文献項目の途中ではなく, 最後に括弧付きで表示する. 
+たとえば出版社名などの後に\texttt{(2025).}のような形で出る. 
+
+タイトル, 雑誌名, 書名はローマン体で表示するようにしている. 
+ノート本文の書体と混ざったときに, 文献一覧だけが過度に目立たないようにするためである. 
+
+\subsection{日本語文献}
+
+日本語文献では, 著者名の順序や区切りが欧文文献と異なる. 
+\texttt{bib.sty}では, \texttt{language}フィールドが設定されている場合に, 日本語向けの名前表示を使うようにしている. 
+
+日本語文献を明示したい場合は, \texttt{.bib}ファイルに
+\begin{center}
+	\verb|language = {japanese},|
+\end{center}
+を追加するとよい. 
+
+\end{document}

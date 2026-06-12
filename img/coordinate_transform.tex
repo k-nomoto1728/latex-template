@@ -1,0 +1,86 @@
+\usetikzlibrary{positioning,calc}
+\begin{tikzpicture}
+	% \draw[thin, dotted] (0, 0) grid(23, 11); % 補助grid
+
+	% 位相空間 X
+	\draw[tension=0.7,thin] plot[smooth cycle] coordinates{
+		(0.5,6) (2.5,2) (6,0.5) (8.5,2.5) (10.5,6) (9.5,9) (6,10.5) (3,8)
+	}
+	(2,9) node{$X$};
+	
+	% U
+	\begin{scope}[local bounding box=U]
+		\draw[densely dashed,line width=1pt,color=ORANGE] (6, 7) circle[radius=2.5] (8,8) node{$U$};
+	\end{scope}
+
+	% Vの中の座標系
+	\begin{scope}
+		\clip (6,7) circle[radius=2.5];
+		\draw[->,thick,color=ORANGE,rotate around={-20:(6,7)}] (2,6) --(10,6) node[right]{};
+		\draw[->,thick,color=ORANGE,rotate around={-20:(6,7)}] (5,4) --(5,11) node[right]{};
+		\draw[ORANGE!40, very thin, rotate around={-20:(6,7)},step=1.67,shift={(0,-0.67)}] (2,4) grid(10,11);
+	\end{scope}
+
+	% V
+	\begin{scope}[local bounding box=V]
+		\draw[densely dashed,line width=1pt,color=GREEN] (6, 4) circle[radius=2.5] (8,3) node{$V$};
+	\end{scope}
+
+	% Uの中の座標系
+	\begin{scope}
+		\clip (6,4) circle[radius=2.5];
+		\draw[->,thick,color=GREEN,rotate around={-20:(6,4)}] (2,3) --(10,3) node[right]{};
+		\draw[->,thick,color=GREEN,rotate around={-20:(6,4)}] (5,1) --(5,8) node[right]{};
+		\draw[GREEN!40, very thin, rotate around={-20:(6,4)},step=1.67,shift={(0,-0.33)}] (2,1) grid(10,8);
+	\end{scope}
+
+	% 点p
+	\coordinate (p) at (6, 5.5);
+	\draw[color=BLUE,fill=BLUE] (p) circle[radius=0.1] node[anchor=south]{$p$};
+
+	% R^mの座標系
+	\draw[ORANGE!40, very thin, step=1] (15.1,6.5) grid(21.9,10.5);
+	\draw[->,thick,color=ORANGE] (15,8) --(22,8) node[right]{$x_1$};
+	\draw[->,thick,color=ORANGE] (18,6.5) --(18,10.5) node[right]{$x_2$};
+
+	% Udash
+	\begin{scope}[local bounding box=Udash]
+		\draw[densely dashed,line width=1pt,color=ORANGE] (18.5, 8.5) circle[radius=1.5] (20, 10) node{$\varphi(U)$};
+	\end{scope}
+
+	% 2つの円の共通部分
+	\begin{scope}
+		\clip (18.5,8.5) circle[radius=1.5];
+		\draw[densely dashed,line width=1pt,color=GREEN] (19.3,6.9) circle[radius=1.5];
+	\end{scope}
+
+	% 点phi(p)
+	\coordinate (p) at (18.8, 7.7);
+	\draw[color=BLUE,fill=BLUE] (p) circle[radius=0.1] node[anchor=west]{$\varphi(p)$};
+
+	% R^mの座標系
+	\draw[GREEN!40, very thin, step=1] (15.1,0.5) grid(21.9,4.5);
+	\draw[->,thick,color=GREEN] (15,2) --(22,2) node[right]{$y_1$};
+	\draw[->,thick,color=GREEN] (18,0.5) --(18,4.5) node[right]{$y_2$};
+
+	% Vdash
+	\begin{scope}[local bounding box=Vdash]
+		\draw[densely dashed,line width=1pt,color=GREEN] (18.5, 2.5) circle[radius=1.5] (20, 2) node{$\psi(V)$};
+	\end{scope}
+
+	% 2つの円の共通部分
+	\begin{scope}
+		\clip (18.5,2.5) circle[radius=1.5];
+		\draw[densely dashed,line width=1pt,color=ORANGE] (17.9,4.3) circle[radius=1.5];
+	\end{scope}
+
+	% 点psi(p)
+	\coordinate (p) at (18.3, 3.4);
+	\draw[color=BLUE,fill=BLUE] (p) circle[radius=0.1] node[anchor=east]{$\psi(p)$};
+
+	% 繋ぎ線
+	\draw[->,thick,shorten <=10pt, shorten >=10pt] (Udash.south) --(Vdash.north) node[midway, right]{$\psi\circ\varphi^{-1}$};
+	\draw[->,thick,shorten <=10pt, shorten >=10pt] (Udash.west) --(U.east) node[midway, above]{$\varphi^{-1}$};
+	\draw[->,thick,shorten <=10pt, shorten >=10pt] (Vdash.west) --(V.east) node[midway, below]{$\psi^{-1}$};
+
+\end{tikzpicture}

@@ -1,0 +1,90 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+% --------------------------------------------------
+\section{theorem.sty}
+% --------------------------------------------------
+
+\texttt{theorem.sty}では, 定理, 補題, 命題, 定義, 例, 注意などの環境を定義している. 
+見た目の作成には\texttt{tcolorbox}を使い, 色は\texttt{core.sty}で定義した\verb|\ThmColor|や\verb|\DefiColor|などを参照している. 
+
+\subsection{定理系環境}
+
+用意している定理系環境は以下の通りである. 
+\begin{itemize}
+	\item \verb|thm| : 定理
+	\item \verb|lem| : 補題
+	\item \verb|prop| : 命題
+	\item \verb|cor| : 系
+	\item \verb|defi| : 定義
+	\item \verb|ex| : 例
+	\item \verb|rem| : 注意
+\end{itemize}
+
+これらの環境は, いずれも
+\begin{center}
+	\verb|\begin{<環境名>}{<説明>}{<ラベル>} ... \end{<環境名>}|
+\end{center}
+の形で使う. 
+\verb|<説明>|には定理名, 引用元, 簡単な補足などを書くことができる. 
+\verb|<ラベル>|に指定した名前は, 後から\verb|\zcref|で参照できる. 
+
+番号は節ごとにリセットされ, 定理, 補題, 命題, 系, 定義, 例, 注意で同じカウンタを共有する. 
+したがって, 本文中では「定理1.1」の次に「定義1.2」が続くような番号付けになる. 
+
+\begin{defi}{群}{doc-def-group}
+	集合$G$と写像$G\times G\to G$が群であるとは, 結合法則, 単位元の存在, 逆元の存在を満たすことである. 
+\end{defi}
+
+\begin{thm}{準同型定理}{doc-thm-hom}
+	$f:G\to H$を群準同型とする. 
+	このとき, $f$から誘導される写像
+	\begin{align}
+		\tilde{f}:G/\Ker f\to \Im f,\quad x\Ker f\mapsto f(x) \label{doc-thm-hom-map}
+	\end{align}
+	は同型写像である. 
+\end{thm}
+
+\begin{proof}
+	$x\Ker f=y\Ker f$ならば$xy^{-1}\in\Ker f$である. 
+	したがって$f(x)=f(y)$となり, \zcref{doc-thm-hom-map}はwell-definedである. 
+	全射性は像の定義から従い, 単射性も同様に核の定義から従う. 
+	よって\zcref{doc-thm-hom}が示された. 
+\end{proof}
+
+\subsection{証明環境}
+
+\texttt{amsthm}の\texttt{proof}環境は, \texttt{tcolorbox}で囲む形に調整している. 
+証明記号は\verb|\AccentColor|の黒四角になる. 
+
+証明の見出しを変えたい場合は, 通常の\texttt{proof}環境と同じく
+\begin{center}
+	\verb|\begin{proof}[別証] ... \end{proof}|
+\end{center}
+のように書けばよい. 
+
+\subsection{Pythonコード}
+
+現在, Pythonコードを掲載するための\verb|pycode|環境も\texttt{theorem.sty}で定義している. 
+これはSageMathのコードをノートに載せることを想定した環境であり, \texttt{tcolorbox}と\texttt{listings}を使っている. 
+
+\begin{center}
+	\verb|\begin{pycode}{<タイトル>}{<ラベル>} ... \end{pycode}|
+\end{center}
+の形で使う. 
+ラベルの型は\texttt{listing}なので, \verb|\zcref|で参照すると「コード」と表示される. 
+
+\begin{pycode}{繰り返し二乗法}{doc-py-power}
+def power(base, exp):
+	result = 1
+	while exp != 0:
+		if exp & 1 == 1:
+			result *= base
+		base *= base
+		exp >>= 1
+	return result
+\end{pycode}
+
+例えば, \zcref{doc-py-power}のように本文中から参照できる. 
+
+\end{document}

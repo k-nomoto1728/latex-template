@@ -1,0 +1,16 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+% --------------------------------------------------
+\section{code.sty}
+% --------------------------------------------------
+
+\texttt{code.sty}は, コード掲載まわりの設定を分離するために用意しているスタイルファイルである. 
+現時点では有効なパッケージやマクロは定義しておらず, \texttt{note.sty}から読み込まれる予約用のファイルになっている. 
+
+現在のテンプレートで実際に使えるPythonコード掲載環境\verb|pycode|は, \texttt{theorem.sty}で定義している. 
+使い方は\texttt{theorem.sty}の節を参照する. 
+
+将来的にPython以外の言語設定やコード表示の細かい調整を増やす場合は, この\texttt{code.sty}にまとめると, 他のスタイルファイルと役割を分けやすい. 
+
+\end{document}

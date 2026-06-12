@@ -1,0 +1,124 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+% --------------------------------------------------
+\section{フォルダ構成}
+% --------------------------------------------------
+
+このテンプレートは, 本文, 説明文, スタイルファイル, 文献データ, 画像ファイルを役割ごとに分けている. 
+最初はファイル数が多く見えるかもしれないが, 基本的には\texttt{main.tex}を入口として, 必要に応じて\texttt{doc/}や\texttt{sty/}の中を編集すればよい. 
+
+\subsection{全体像}
+
+主なフォルダ構成は次の通りである. 
+
+\begin{verbatim}
+note/
+├── main.tex
+├── main.synctex.gz
+├── main.pdf
+├── sty/
+│     ├── note.sty
+│     ├── core.sty
+:      :
+│     └── bib.sty
+├── doc/
+│     ├── structure.tex
+│     ├── note.tex
+:      :
+│     └── bib.tex
+├── bib/
+│     └── refs.bib
+├── img/
+│      └── coordinate_transform.tex
+├── ref
+└── aux
+\end{verbatim}
+
+\subsection{入口となるファイル}
+
+\texttt{main.tex}は, 文書全体を組み立てるための入口である. 
+文書クラス, \texttt{note.sty}の読み込み, 数式作用素の定義, 文献ファイルの登録, タイトル情報, 本文ファイルの読み込みをここに書いている. 
+
+本文を増やしたい場合は, \texttt{doc/}の中に新しい\texttt{tex}ファイルを作り, \texttt{main.tex}に
+\begin{center}
+	\verb|\subfile{doc/<ファイル名>.tex}|
+\end{center}
+を追加する. 
+既存の説明文もこの方法で分割している. 
+
+\subsection{スタイルファイル}
+
+\texttt{sty/}には, 見た目やマクロを定義するスタイルファイルを置いている. 
+利用者が通常読み込むのは\texttt{sty/note.sty}だけでよい. 
+\texttt{note.sty}が他のスタイルファイルを順に読み込むため, 個別に\texttt{core.sty}や\texttt{math.sty}を読み込む必要はない. 
+
+各スタイルファイルの役割は, おおまかに次の通りである. 
+\begin{itemize}
+	\item \texttt{core.sty} : 基本パッケージ, 色, 数式表示の共通設定
+	\item \texttt{layout.sty} : 背景色, ページスタイル, 目次, 見出し, 箇条書き
+	\item \texttt{math.sty} : 数式用マクロ, 括弧, アクセント, 特殊記号
+	\item \texttt{theorem.sty} : 定理系環境, 証明環境, Pythonコード環境
+	\item \texttt{code.sty} : コード掲載機能を拡張するための予約ファイル
+	\item \texttt{ref.sty} : \texttt{zref-clever}による日本語参照設定
+	\item \texttt{bib.sty} : \texttt{biblatex}による文献表示設定
+\end{itemize}
+
+\subsection{説明文ファイル}
+
+\texttt{doc/}には, このテンプレートの説明文を置いている. 
+各\texttt{tex}ファイルは, 対応するスタイルファイルの使い方を説明するためのものである. 
+たとえば\texttt{doc/math.tex}は\texttt{sty/math.sty}の説明, \texttt{doc/bib.tex}は\texttt{sty/bib.sty}の説明になっている. 
+
+各ファイルは\texttt{subfiles}を使っているため, 親ファイルである\texttt{main.tex}から読み込むことも, 必要に応じて単独でコンパイルすることもできる. 
+新しい説明ファイルを作る場合は, 次の形を雛形にするとよい. 
+\begin{verbatim}
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+% --------------------------------------------------
+\section{見出し}
+% --------------------------------------------------
+
+本文を書く. 
+
+\end{document}
+\end{verbatim}
+
+\subsection{文献と画像}
+
+\texttt{bib/refs.bib}には, \texttt{biblatex}で使う文献データを置く. 
+文献を追加したい場合はこのファイルにBibTeX形式で項目を追加し, 本文中では\verb|\cite{<引用ラベル>}|で引用する. 
+
+\texttt{img/}には, 本文中で使う図や画像を置く. 
+現在は\texttt{coordinate\_transform.tex}のように, TikZで描いた図を\verb|\input|で読み込む形にしている. 
+例えば\texttt{doc/note.tex}では, \texttt{img/}フォルダにある\texttt{coordinate\_transform.tex}を次のように読み込んでいる. 
+\begin{verbatim}
+\begin{figure}[tbp]
+	\centering
+	\resizebox{\linewidth}{!}{%
+		\input{img/coordinate_transform}
+	}
+	\caption{座標変換の模式図}
+	\label{fig:sample-coordinate-transform}
+\end{figure}
+\end{verbatim}
+このように, 図形を描くための\texttt{tex}ファイルを\texttt{img/}に置いておくと, 本文側では\verb|\input|で呼び出すだけでよい. 
+画像ファイルを使う場合も, 同じフォルダに置いて\verb|\includegraphics|で読み込めばよい. 
+
+\begin{figure}[htbp]
+	\centering
+	\resizebox{0.8\linewidth}{!}{%
+		\input{img/coordinate_transform}
+	}
+	\caption{座標変換の模式図}
+	\label{fig:sample-coordinate-transform}
+\end{figure}
+
+\subsection{生成されるファイル}
+
+\texttt{main.pdf}は, \texttt{main.tex}をコンパイルして得られるPDFである. 
+また, コンパイル時には\texttt{aux/}や\texttt{main.log}, \texttt{main.synctex.gz}などの補助ファイルが生成されることがある. 
+これらは本文やスタイルの本体ではなく, \LaTeX が処理のために作るファイルである. 
+
+\end{document}

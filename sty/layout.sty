@@ -1,0 +1,295 @@
+% layout.sty
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    packages                                                                                      %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    background & text color                                                                       %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagecolor{\BaseColor}
+\color{\TextColor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    header / footer                                                                               %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\@ifclasswith{jlreq}{report}{%
+  \DeclarePageStyle{note}{%
+    running_head_position=top-gutter,
+    running_head_ii_position=top-fore-edge,
+    nombre_position=bottom-fore-edge,
+    odd_running_head=_chapter,
+    odd_running_head_ii=_section,
+    even_running_head=_chapter,
+    even_running_head_ii=_section,
+    running_head_font={\color{\AccentColor}\footnotesize},
+    running_head_ii_font={\color{\AccentColor}\footnotesize},
+    nombre_font={\color{\AccentColor}\footnotesize},
+    mark_format={
+      _chapter={第\,\thechapter\,章\ #1},
+      _section={第\,\thesection\,節\ #1}
+    }
+  }
+}{%
+  \DeclarePageStyle{note}{%
+    running_head_position=top-gutter,
+    running_head_ii_position=top-fore-edge,
+    nombre_position=bottom-fore-edge,
+    odd_running_head=_section,
+    odd_running_head_ii={},
+    even_running_head=_section,
+    even_running_head_ii={},
+    running_head_font={\color{\AccentColor}\footnotesize},
+    running_head_ii_font={\color{\AccentColor}\footnotesize},
+    nombre_font={\color{\AccentColor}\footnotesize},
+    mark_format={
+      _section={第\,\thesection\,節\ #1},
+      _subsection={\thesubsection\ #1}
+    }
+  }
+}
+\makeatother
+\pagestyle{note}
+% plainページでもノンブル位置を揃える
+\ModifyPageStyle{plain}{
+  nombre_position=bottom-fore-edge,
+  nombre_font={\color{\AccentColor}\footnotesize},
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    table of contents                                                                             %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\@ifclasswith{jlreq}{report}{%
+  \renewcommand*{\l@chapter}{\@dottedtocline{0}{0pt}{2\zw}}
+  \renewcommand*{\l@section}{\@dottedtocline{1}{0pt}{3\zw}}
+}{%
+  \renewcommand*{\l@section}{\@dottedtocline{1}{0pt}{2\zw}}
+}
+\def\jlreq@heading@maketoc@chapter#1#2#3{%
+  \jlreq@iffirsttoken{#1}{*}{}{%
+    \chaptermark{#3}%
+    \@ifpackageloaded{hyperref}{\phantomsection}{}%
+    \jlreq@if{\ifnum0\jlreq@iffirsttoken{#1}{-}{1}{}\ifnum 0>\c@secnumdepth 1\fi>0 \fi}{%
+      \addcontentsline{toc}{chapter}{#3}%
+    }{%
+      \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#3}%
+    }%
+  }{}%
+}
+\def\jlreq@heading@maketoc@section#1#2#3{%
+  \jlreq@iffirsttoken{#1}{*}{}{%
+    \sectionmark{#3}%
+    \@ifpackageloaded{hyperref}{\phantomsection}{}%
+    \jlreq@if{\ifnum0\jlreq@iffirsttoken{#1}{-}{1}{}\ifnum 1>\c@secnumdepth 1\fi>0 \fi}{%
+      \addcontentsline{toc}{section}{#3}%
+    }{%
+      \addcontentsline{toc}{section}{\protect\numberline{\thesection}#3}%
+    }%
+  }{}%
+}
+
+\let\note@orig@tableofcontents\tableofcontents
+\renewcommand{\tableofcontents}{%
+  \begingroup
+    \renewcommand{\normalcolor}{\color{\TextColor}}%
+    \color{\TextColor}%
+    \pagestyle{empty}%
+    \thispagestyle{empty}%
+    \note@orig@tableofcontents
+    \thispagestyle{empty}%
+  \endgroup
+}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    title page                                                                                    %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\renewcommand{\maketitle}{%
+\@ifclasswith{jlreq}{titlepage}{%
+  % titlepage version
+  \begin{titlepage}
+
+    \centering
+    
+    \vspace*{3cm}
+    \textcolor{\TextColor}{\rule{\linewidth}{0.5mm}} \\[0.7cm]
+    {\Huge\bfseries\textcolor{\TextColor}{\@title}} \\[0.3cm]
+    \textcolor{\TextColor}{\rule{\linewidth}{0.5mm}} \\
+    
+    \vfill
+        
+    {\LARGE\textcolor{\TextColor}{\@author}} \\[0.5cm]
+    {\normalsize\textcolor{\TextColor}{\@date}} \\
+    \vspace*{2cm}
+
+  \end{titlepage}
+
+}{%
+  % normal version
+  \thispagestyle{empty}
+  \begin{center}
+
+    \medskip
+    
+    {\huge\bfseries\textcolor{\TextColor}{\@title}} \\[0.5cm]
+    {\normalsize\textcolor{\TextColor}{\@author}} \\[0.2cm]
+    {\normalsize\textcolor{\TextColor}{\@date}} \\
+
+    \bigskip
+
+  \end{center}
+  \medskip
+}
+}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    abstract environment                                                                          %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\renewenvironment{abstract}{%
+\@ifclasswith{jlreq}{titlepage}{%
+  % ----- abstract page version -----
+  \newpage
+  \thispagestyle{empty}
+  \vspace*{\fill}
+}{%
+  % ----- normal version -----
+  \medskip
+}%
+\begingroup
+\color{\AccentColor}%
+\@afterindenttrue
+\@afterheading
+}{%
+\par
+\endgroup
+\@ifclasswith{jlreq}{titlepage}{%
+  \vspace*{\fill}
+  \newpage
+}{%
+  \bigskip
+}%
+}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    heading (chapter)                                                                             %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\@ifclasswith{jlreq}{report}{%
+  \ModifyHeading{chapter}{
+    font={\sffamily\gtfamily\bfseries\huge},
+    label_format={第\thechapter 章},
+    align=center, % 見出し中央揃え
+    after_label_space=1\zw, % ラベル(第x章)の後ろのスペース
+    second_heading_text_indent=*0\zw, % 見出しの2行目以降のインデント
+    pagebreak=clearpage, % 見出し直前に改ページ
+    pagestyle=plain, % chapterページではヘッダーを出さない
+    afterindent=true, % 見出し直後の段落の字下げ
+    lines=4,
+    before_lines=0,
+    after_lines=2,
+    format={%
+        {\jlreqHeadingLabel{#1}\jlreqHeadingText{#2}}%
+    }
+  }
+}{}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    heading (section)                                                                             %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ModifyHeading{section}{
+  font={\sffamily\gtfamily\bfseries\LARGE},
+  label_format={第\inhibitglue\thesection\inhibitglue{}節},
+  align=left,
+  after_label_space=1\zw,
+  second_heading_text_indent=*0\zw,
+  afterindent=true,
+  lines=2,
+  before_lines=2,
+  after_lines=1,
+  format={%
+    \hspace*{1.5\zw}#1#2#3\par\nobreak\nointerlineskip
+    \kern0ex%
+    \hbox to \hsize{%
+      \hss%
+      \raisebox{0.1ex}{\hbox{\huge\ensuremath{\star}}}%
+      \kern0.2em%
+      \raisebox{0.6ex}{%
+        \rule{0.95\textwidth}{0.8pt}%
+      }%
+      \kern0.2em%
+      \raisebox{0.1ex}{\hbox{\huge\ensuremath{\star}}}%
+      \hss%
+    }%
+  }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    heading (subsection)                                                                          %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ModifyHeading{subsection}{
+  font={\sffamily\gtfamily\bfseries\Large},
+  indent=0pt,
+  lines=2,
+  before_lines=1,
+  after_lines=0,
+  format={%
+    \smash{\raisebox{0ex}{\hbox{\huge\ensuremath{\star}}}}%
+    \hspace*{0.5em}#2#3%
+  }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    heading (subsubsection)                                                                       %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    enumerate environment                                                                         %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\theenumi}{\arabic{enumi}}
+\renewcommand{\labelenumi}{(\theenumi)\,}
+\renewcommand{\theenumii}{\theenumi-\arabic{enumii}}
+\renewcommand{\labelenumii}{(\theenumii)\,}
+\setlength{\labelsep}{0.5\zw}
+\setlength{\leftmargini}{3\zw}

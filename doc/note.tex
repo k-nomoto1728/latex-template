@@ -1,0 +1,28 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+% --------------------------------------------------
+\section{note.sty}
+% --------------------------------------------------
+
+\texttt{note.sty}は, このテンプレート全体を読み込むための入口となるスタイルファイルである. 
+このテンプレートをそのまま使う場合は, プリアンブルに
+\begin{center}
+	\verb|\usepackage{sty/note}|
+\end{center}
+と書けばよい. 各スタイルファイルを個別に読み込む必要はない. 
+
+\texttt{note.sty}では, はじめに\texttt{core.sty}を読み込む. 
+\texttt{core.sty}で色や基本パッケージを定義してから, 他のスタイルファイルがそれらを使うためである. 
+その後, 文献, コード用の予約ファイル, レイアウト, 数式, リンク, 参照, 定理環境の順に読み込む. 
+\begin{center}
+	\texttt{core, bib, code, layout, math, hyperref, bookmark, ref, theorem}
+\end{center}
+
+リンクまわりについては, \texttt{hyperref.sty}と\texttt{bookmark.sty}を読み込んでいる. 
+PDFのしおりは番号付きにし, 本文中のリンク枠は表示しない設定にしている. 
+
+色, 見出し, 定理環境, 数式マクロ, 参照, 文献表示などの詳細は, それぞれ対応する節で説明する. 
+
+
+\end{document}

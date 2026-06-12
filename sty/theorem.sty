@@ -1,0 +1,188 @@
+% theorem.sty
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    packages                                                                                      %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{tcolorbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    theorem style                                                                                 %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tcbuselibrary{breakable,skins,theorems,hooks}
+
+\tcbset{
+	NoteStyle/.style={
+    enhanced, % 諸々のオプションの指定に必要
+	fonttitle=\rmfamily\bfseries\upshape, % タイトルのフォント指定
+	boxrule=0pt, % 外枠の線の太さ
+    coltext=\TextColor,
+    frame hidden, % 枠を完全に消す
+    sharp corners=all, % 枠角を直角にする
+	left=1\zw, % 左枠から本文までの空白の長さ
+	right=1\zw, % 右枠から本文までの空白の長さ
+    before skip=20pt, % % 枠前の本文とのスペース
+    after skip=20pt, % % 枠後の本文とのスペース
+    after title=\hspace{5pt},
+	breakable, % ページ跨ぎを許す
+    attach title to upper, % タイトル部を本文と一体化させる
+    terminator sign={.}, % 定理1. のような定理名の後の記号
+    label is zlabel, % zcrefで引用指定
+    label separator={}, % zcrefで引用する際のラベルセパレータ
+    before upper app={\setlength{\parindent}{1\zw}}, % 段落初めにインデントする
+	},
+    Thm/.style={
+    coltitle=\ThmColor, % タイトルの文字色
+    colback=\ThmColor!6!white, % 本文の背景色
+    borderline west={2pt}{0pt}{\ThmColor}, % 左枠の線
+    },
+    Lem/.style={
+    coltitle=\LemColor, % タイトルの文字色
+    colback=\LemColor!6!white, % 本文の背景色
+    borderline west={2pt}{0pt}{\LemColor}, % 左枠の線
+    },
+    Prop/.style={
+    coltitle=\PropColor, % タイトルの文字色
+    colback=\PropColor!6!white, % 本文の背景色
+    borderline west={2pt}{0pt}{\PropColor}, % 左枠の線
+    },
+    Cor/.style={
+    coltitle=\CorColor, % タイトルの文字色
+    colback=\CorColor!6!white, % 本文の背景色
+    borderline west={2pt}{0pt}{\CorColor}, % 左枠の線
+    },
+    Ex/.style={
+    coltitle=\ExColor, % タイトルの文字色
+    colback=\ExColor!6!white, % 本文の背景色
+    % borderline west={2pt}{0pt}{\ExColor}, % 左枠の線
+    },
+    Defi/.style={
+    coltitle=\DefiColor, % タイトルの文字色
+    colback=\DefiColor!6!white, % 本文の背景色
+    borderline west={2pt}{0pt}{\DefiColor}, % 左枠の線
+    },
+    Rem/.style={
+    coltitle=\RemColor, % タイトルの文字色
+    colback=\RemColor!6!white, % 本文の背景色
+    % borderline west={2pt}{0pt}{\RemColor}, % 左枠の線
+    }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    theorem-like environments                                                                     %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtcbtheorem[number within=section]{thm}{定理}{Thm, NoteStyle, label type=theorem}{}
+\newtcbtheorem[use counter from=thm]{lem}{補題}{Lem, NoteStyle, label type=lemma}{}
+\newtcbtheorem[use counter from=thm]{prop}{命題}{Prop, NoteStyle, label type=proposition}{}
+\newtcbtheorem[use counter from=thm]{cor}{系}{Cor, NoteStyle, label type=corollary}{}
+\newtcbtheorem[use counter from=thm]{defi}{定義}{Defi, NoteStyle, label type=definition}{}
+\newtcbtheorem[use counter from=thm]{ex}{例}{Ex, NoteStyle, label type=example}{}
+\newtcbtheorem[use counter from=thm]{rem}{注意}{Rem, NoteStyle, label type=remark}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    proof environment                                                                             %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tcbset{
+    ProofBoxStyle/.style={
+    enhanced, % 諸々のオプションの指定に必要
+    colback=\BaseColor, % 本文の背景色
+    coltext=\TextColor,
+    boxrule=0pt, % 外枠の線の太さ
+    frame hidden, % 枠を完全に消す
+    sharp corners=all, % 枠角を直角にする
+    left=6pt, % 左枠から本文までの空白の長さ
+    before skip=-15pt, % 枠前の本文とのスペース
+    after skip=30pt, % 枠後の本文とのスペース
+    breakable, % ページ跨ぎを許す
+    before upper app={\setlength{\parindent}{1\zw}}, % 段落初めにインデントする
+    },
+}
+
+\tcolorboxenvironment{proof}{ProofBoxStyle}
+
+\renewcommand{\qedsymbol}{\textcolor{\AccentColor}{\ensuremath{\blacksquare}}}
+
+\makeatletter
+\newcommand{\note@proof@begin}[2]{%
+    \par\pushQED{\qed}\normalfont
+    \renewcommand{\qedsymbol}{\textcolor{#1}{\ensuremath{\blacksquare}}}%
+    \topsep6\p@\@plus6\p@\relax
+    \trivlist
+    \item[\hskip\labelsep
+            \bfseries\color{#1}#2\@addpunct{.}]%
+    \ignorespaces
+}
+\newcommand{\note@proof@end}{%
+    \popQED\endtrivlist\@endpefalse
+}
+
+\renewenvironment{proof}[1][証明]{%
+    \note@proof@begin{\AccentColor}{#1}%
+    }{%
+    \note@proof@end
+}
+
+\tcolorboxenvironment{proofthm}{ProofBoxStyle}
+\tcolorboxenvironment{proofprop}{ProofBoxStyle}
+\tcolorboxenvironment{proofcor}{ProofBoxStyle}
+\tcolorboxenvironment{proofex}{ProofBoxStyle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+%    Source Code for Python (SageMath)                                                             %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tcbuselibrary{listings}
+
+\tcbset{
+	PythonStyle/.style 2 args={
+    fonttitle=\rmfamily\bfseries\upshape,
+    boxrule=0pt,
+    left=1\zw,
+		right=1\zw,
+    sharp corners=all,
+    before upper={\setlength{\parindent}{0pt}},
+		before lower={\setlength{\parindent}{0pt}},
+    before skip=10pt,
+		after skip=10pt,
+    enhanced,
+    breakable,
+    colframe=\BaseColor,
+    colback=\BaseColor!2!white,
+    colbacktitle=\BaseColor,
+    label is zlabel,
+    label separator={},
+    label type=listing,
+    listing only,
+    listing options={
+      language=Python,
+      morekeywords={False,None,True,async,await,nonlocal,match,case},
+      basicstyle=\ttfamily\small,
+      keywordstyle=\color{\AccentColor}\bfseries,
+      commentstyle=\color{GREEN},
+      stringstyle=\color{ORANGE},
+      columns=fullflexible,
+      keepspaces=true,
+      tabsize=4,
+      showstringspaces=false,
+      breaklines=true,
+      breakatwhitespace=true,
+    },
+    title={コード \thetcbcounter: #1},
+    label={#2},
+	}
+}
+
+\newtcblisting[use counter from=thm]{pycode}[3][]{PythonStyle={#2}{#3},#1}

@@ -1,0 +1,54 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+% --------------------------------------------------
+\section{ref.sty}
+% --------------------------------------------------
+
+\texttt{ref.sty}では, \texttt{zref-clever}を使って相互参照の表示を日本語向けに設定している. 
+通常の\verb|\ref|や\verb|\eqref|を使い分ける代わりに, 基本的には\verb|\zcref|を使えばよい. 
+
+\subsection{基本的な使い方}
+
+参照したい対象にラベルを付けておき, 本文中で
+\begin{center}
+	\verb|\zcref{<ラベル>}|
+\end{center}
+と書く. 
+参照先の種類に応じて, 「定理」「式」「図」「節」などの名前が自動で付く. 
+
+\begin{ex}{}{}
+	次の等式にラベルを付ける. 
+	\begin{align}
+		a^2+b^2=c^2 \label{doc-ref-pythagoras}
+	\end{align}
+	すると, 本文中では\zcref{doc-ref-pythagoras}のように参照できる. 
+\end{ex}
+
+複数の対象をまとめて参照する場合も, 同じ命令を使う. 
+\begin{center}
+	\verb|\zcref{doc-def-group,doc-thm-hom}|
+\end{center}
+のように書くと, \zcref{doc-def-group,doc-thm-hom}のように表示される. 
+
+\subsection{日本語表示}
+
+\texttt{ref.sty}では, 日本語の参照名を以下のように設定している. 
+\begin{itemize}
+	\item 章, 節, 段落は「第1章」「第2節」のように表示する. 
+	\item 式は「式(1)」のように表示する. 
+	\item 図, 表, コードは「図」「表」「コード」と表示する. 
+	\item 定理系環境は「定理」「補題」「命題」「定義」「例」「注意」などと表示する. 
+\end{itemize}
+
+この設定により, たとえば定理を命題に変更した場合でも, ラベル名や参照文を変更する必要がない. 
+環境名を\verb|thm|から\verb|prop|に変えるだけで, 参照表示も自動的に「命題」へ変わる. 
+
+\subsection{ラベルの型}
+
+\texttt{theorem.sty}で定義している定理系環境や\verb|pycode|環境には, あらかじめ参照用の型を設定している. 
+そのため, 環境側で指定したラベルをそのまま\verb|\zcref|に渡せばよい. 
+
+自分で新しい\texttt{tcolorbox}環境を追加する場合は, 必要に応じて\texttt{label type}を指定すると, \verb|\zcref|の表示名を制御しやすくなる. 
+
+\end{document}
